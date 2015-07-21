@@ -1,0 +1,19 @@
+{
+  "name": "socket_pg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Austin Enright",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "express": "^4.13.1",
+    "fs": "0.0.2",
+    "path": "^0.11.14",
+    "pg": "^4.4.0",
+    "socket.io": "^1.3.6"
+  }
+}
