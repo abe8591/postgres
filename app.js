@@ -5,11 +5,12 @@ var fs = require('fs');
 
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-var conString = "pg://postgres:111111@149.24.49.145:5432/todo";
-var client = new pg.Client(conString);
+//var connect = "149.24.49.145:5432";
+var connect = "149.24.49.145:5432";
+var conString = "pg://postgres:111111@" + connect + "/todo";
+var client = new pg.Client(conString);;
 
 app.listen(port, function(err) {
-	
 	 console.log('listening on *:3000');
 });
 
@@ -18,7 +19,6 @@ function handler (req, res) {
     if (err) {
       throw err;
     }
-
     res.writeHead(200);
     res.end(data);
   });
@@ -27,9 +27,8 @@ function handler (req, res) {
 io.on('connection', function(socket){
 	console.log('a user connected');
 	
-	
 	socket.on('create', function(req) {
-		//client.connect();
+		client.connect();
 		pg.connect(conString, function(err, client, done) {
 			if(err) {
 				console.log(err);
@@ -44,7 +43,7 @@ io.on('connection', function(socket){
 	});
 	  
 	socket.on('insert', function(req) {
-		//client.connect();
+		client.connect();
 		pg.connect(conString, function(err, client, done) {
 			if(err) {
 				console.log(err);
@@ -65,11 +64,8 @@ io.on('connection', function(socket){
 	  
 	socket.on('select', function(req) {
 		var results = [];
-		//client.connect();
+		client.connect();
 		pg.connect(conString, function(err, client, done) {
-			//client.query(req).on("row", function (row) {
-				//results.push(row);
-			//});
 			
 			client.query(req, function (err, result) {
 				// On end JSONify and write the results to console and to HTML output
@@ -85,7 +81,7 @@ io.on('connection', function(socket){
 	});
 	  
 	socket.on('put', function(req) {
-		//client.connect();
+		client.connect();
 		pg.connect(conString, function(err, client, done) {
 			client.query(req, function (err, result) {
 				if(err) {
