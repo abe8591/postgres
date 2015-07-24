@@ -5,12 +5,11 @@ var pg = require('pg');
 
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-var conString = "pg://postgres:111111@149.24.49.145:5432/todo";
+var conString = "pg://other_user:u_pick_it@52.2.3.184:5432/ellucian";
 var client = new pg.Client(conString);
 
 http.listen(port, function(err) {
-	
-	 console.log('listening on *:3000');
+	 console.log('listening on ' + port);
 });
 
 app.get('/', function (req, res) {
@@ -21,7 +20,6 @@ io.on('connection', function(socket){
 	console.log('a user connected');
 	
 	socket.on('create', function(req) {
-		//
 		pg.connect(conString, function(err, client, done) {
 			if(err) {
 				console.log(err);
@@ -36,7 +34,6 @@ io.on('connection', function(socket){
 	});
 	  
 	socket.on('insert', function(req) {
-		//client.connect();
 		pg.connect(conString, function(err, client, done) {
 			if(err) {
 				console.log(err);
@@ -57,14 +54,9 @@ io.on('connection', function(socket){
 	  
 	socket.on('select', function(req) {
 		var results = [];
-		//client.connect();
-		pg.connect(conString, function(err, client, done) {
-			//client.query(req).on("row", function (row) {
-				//results.push(row);
-			//});
-			
+		pg.connect(conString, function(err, client, done) {			
 			client.query(req, function (err, result) {
-				// On end JSONify and write the results to console and to HTML output
+				// Write out as HTML output
 				if(err) {
 					console.log(err);
 				} else {
@@ -76,13 +68,11 @@ io.on('connection', function(socket){
 	});
 	  
 	socket.on('put', function(req) {
-		//client.connect();
 		pg.connect(conString, function(err, client, done) {
 			client.query(req, function (err, result) {
 				if(err) {
 					console.log(err);
 				} else {
-					console.log(JSON.stringify(result, null, "    "));
 					done();
 				}
 			});
@@ -91,13 +81,11 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('delete', function(req) {
-		//client.connect();
 		pg.connect(conString, function(err, client, done) {
 			client.query(req, function (err, result) {
 				if(err) {
 					console.log(err);
 				} else {
-					console.log(JSON.stringify(result, null, "    "));
 					done();
 				}
 			});
