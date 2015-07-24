@@ -1,28 +1,21 @@
-var app = require('http').createServer(handler);
-var io = require('socket.io')(app);
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var pg = require('pg');
-var fs = require('fs');
 
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 var conString = "pg://postgres:111111@149.24.49.145:5432/todo";
 var client = new pg.Client(conString);
 
-app.listen(port, function(err) {
+http.listen(port, function(err) {
 	
 	 console.log('listening on *:3000');
 });
 
-function handler (req, res) {
-  fs.readFile(__dirname + '/client/index.html', function (err, data) {
-    if (err) {
-      throw err;
-    }
-
-    res.writeHead(200);
-    res.end(data);
-  });
-}
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/client/index.html');
+});
 
 io.on('connection', function(socket){
 	console.log('a user connected');
