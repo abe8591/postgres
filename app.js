@@ -42,7 +42,7 @@ io.on('connection', function(socket){
 				//handle the error
 				console.log(error);
 				done(client);
-				client = new pg.Client(conString);
+				//client = new pg.Client(conString);
 				error = "Incorrect syntax";
 				socket.emit('err', error);
 			});
@@ -77,7 +77,7 @@ io.on('connection', function(socket){
 				//handle the error
 				console.log(error);
 				done(client);
-				client = new pg.Client(conString);
+				//client = new pg.Client(conString);
 				error = "Incorrect syntax";
 				socket.emit('err', error);
 			});
@@ -93,7 +93,7 @@ io.on('connection', function(socket){
 				if(err) {
 					console.log(err);
 					done(client);
-					client = new pg.Client(conString);
+					//client = new pg.Client(conString);
 					error = "Incorrect syntax";
 					socket.emit('err', err);
 				} else {
@@ -111,7 +111,7 @@ io.on('connection', function(socket){
 				//handle the error
 				console.log(error);
 				done(client);
-				client = new pg.Client(conString);
+				//client = new pg.Client(conString);
 				error = "Incorrect syntax";
 				socket.emit('err', error);
 			});
@@ -126,7 +126,7 @@ io.on('connection', function(socket){
 				//handle the error
 				console.log(error);
 				done(client);
-				client = new pg.Client(conString);
+				//client = new pg.Client(conString);
 				error = "Incorrect syntax";
 				socket.emit('err', error);
 			});
