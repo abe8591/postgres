@@ -2,7 +2,6 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var pg = require('pg');
-var favicon = require('serve-favicon');
 
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -16,8 +15,6 @@ http.listen(port, function(err) {
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/client/index.html');
 });
-
-app.use(favicon(__dirname + '/client/favicon.ico'));
 
 io.on('connection', function(socket){
 	console.log('a user connected');
@@ -90,16 +87,16 @@ io.on('connection', function(socket){
 		pg.connect(conString, function(err, client, done) {			
 			var query = client.query(req, function (err, result) {
 				// Write out as HTML output
-				socket.emit('table', result);
-				done();
-			});
-			query.on('error', function(error) {
-				//handle the error
-				console.log(error);
-				done(client);
-				client = new pg.Client(conString);
-				error = "Incorrect syntax";
-				socket.emit('err', error);
+				if(err) {
+					console.log(err);
+					done(client);
+					client = new pg.Client(conString);
+					error = "Incorrect syntax";
+					socket.emit('err', err);
+				} else {
+					socket.emit('table', result);
+					done();
+				}
 			});
 		});
 	});
