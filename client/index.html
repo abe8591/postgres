@@ -14,36 +14,50 @@
 		var sorter;
 		$(document).ready(function() {
 			
-			sorter = $("#initTable").tablesorter();
+			var create1;
+			var create2;
+			var insert1;
+			var insert2;
+			var select;
+			var put;
+			var _delete;
 			
+			sorter = $("#initTable").tablesorter();
 
 			var socket = io();
 			console.log(socket);
 			
-			var create1 = $("#creArea1")[0].innerHTML;
-			var create2 = $("#creArea2")[0].innerHTML;
 			document.querySelector("#creBtn").onclick = function() {
+				create1 = $("#creArea1")[0].value;
+				create2 = $("#creArea2")[0].value;
+				console.log(create1);
+				console.log(create2);
 				socket.emit('create', { create1: create1, create2: create2 });
 			};
 			
-			var insert1 = $("#insArea1")[0].innerHTML;
-			var insert2 = $("#insArea2")[0].innerHTML;
 			document.querySelector("#insBtn").onclick = function() {
+				insert1 = $("#insArea1")[0].value;
+				insert2 = $("#insArea2")[0].value;
+				console.log(insert1);
+				console.log(insert2);
 				socket.emit('insert', { insert1: insert1, insert2: insert2 });
 			};
 			
-			var select = $("#selArea")[0].innerHTML;
 			document.querySelector("#selBtn").onclick = function() {
+				select = $("#selArea")[0].value;
+				console.log(select);
 				socket.emit('select', select);
 			};
 			
-			var put = $("#putArea")[0].innerHTML;
 			document.querySelector("#putBtn").onclick = function() {
+				put = $("#putArea")[0].value;
+				console.log(put);
 				socket.emit('put', put);
 			};
 			
-			var _delete = $("#delArea")[0].innerHTML;
 			document.querySelector("#delBtn").onclick = function() {
+				_delete = $("#delArea")[0].value;
+				console.log(_delete);
 				socket.emit('delete', _delete);
 			};
 			
@@ -199,8 +213,8 @@
 		<button id="creBtn" type="submit">Submit</button>
 		<br />
 		<p>INSERT</p>
-		<textarea id="insArea1" rows="4" cols="50">INSERT INTO emps(firstname, lastname) values('Tinniam', 'Ganesh');</textarea>
-		<textarea id="insArea2" rows="4" cols="50">INSERT INTO emps(firstname, lastname) values('Anand', 'Karthik');</textarea>
+		<textarea id="insArea1" rows="4" cols="50">INSERT INTO emps(firstname, lastname) values('Austin', 'Enright');</textarea>
+		<textarea id="insArea2" rows="4" cols="50">INSERT INTO emps(firstname, lastname) values('Michael', 'Mastro');</textarea>
 		<button id="insBtn" type="submit">Submit</button>
 		<br />
 		<p>SELECT</p>
@@ -208,19 +222,19 @@
 		<button id="selBtn" type="submit">Submit</button>
 		<br />
 		<p>UPDATE</p>
-		<textarea id="putArea" rows="4" cols="50">UPDATE emps set firstname = 'Kumar' WHERE firstname='Anand' AND lastname='Karthik';</textarea>
+		<textarea id="putArea" rows="4" cols="50">UPDATE emps set firstname = 'Jim' WHERE firstname='Austin' AND lastname='Mastro';</textarea>
 		<button id="putBtn" type="submit">Submit</button>
 		<br />
 		<p>DELETE</p>
-		<textarea id="delArea" rows="4" cols="50">DELETE FROM  emps WHERE lastname = 'Karthik';</textarea>
+		<textarea id="delArea" rows="4" cols="50">DELETE FROM  emps WHERE lastname = 'Mastro';</textarea>
 		<button id="delBtn" type="submit">Submit</button>
 		<br />
 		<div id="initBox">
 			<table id="initTable" class="tablesorter">
 				<thead>
 					<tr>
-						<th>Last Name</th>
 						<th>First Name</th>
+						<th>Last Name</th>
 					</tr>
 				</thead>
 				<tbody id="rows">
