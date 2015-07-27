@@ -20,7 +20,7 @@ io.on('connection', function(socket){
 	console.log('a user connected');
 	
 	socket.on('create', function(req) {
-		pg.connect(conString, function(err, client, done) {
+		pg.connect(conString, function(error, client, done) {
 			console.log(req.create1);
 			console.log(req.create2);
 			var query = client.query(req.create1);
