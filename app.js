@@ -36,7 +36,7 @@ io.on('connection', function(socket){
 				socket.emit('err', error);
 			});
 		});
-		pg.connect(conString, function(err, client, done) {
+		pg.connect(conString, function(error, client, done) {
 			var query = client.query(req.create2);
 			query.on('error', function(error) {
 				//handle the error
@@ -105,7 +105,7 @@ io.on('connection', function(socket){
 	});
 	  
 	socket.on('put', function(req) {
-		pg.connect(conString, function(err, client, done) {
+		pg.connect(conString, function(error, client, done) {
 			var query = client.query(req);
 			query.on('error', function(error) {
 				//handle the error
