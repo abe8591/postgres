@@ -64,6 +64,10 @@
 			socket.on('table', function(result) {
 				makeRow(result);
 			});
+			
+			socket.on('err', function(error) {
+				alert(error);
+			});
 		});
 		
 		function makeRow(rows) {
