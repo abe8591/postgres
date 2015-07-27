@@ -24,18 +24,18 @@ io.on('connection', function(socket){
 	
 	socket.on('create', function(req) {
 		pg.connect(conString, function(error, client, done) {
-			console.log(req.create1);
-			console.log(req.create2);
 			var query = client.query(req.create1);
 			query.on('error', function(error) {
 				//handle the error
 				console.log(error);
 				done(client);
 				client = new pg.Client(conString);
-				error = "Incorrect syntax";
+				error = "Create1 Termination";
 				socket.emit('err', error);
 			});
+			//done(client);
 		});
+		console.log(req.create1);
 		pg.connect(conString, function(error, client, done) {
 			var query = client.query(req.create2);
 			query.on('error', function(error) {
@@ -43,20 +43,21 @@ io.on('connection', function(socket){
 				console.log(error);
 				done(client);
 				//client = new pg.Client(conString);
-				error = "Incorrect syntax";
+				error = "Create2 Termination";
 				socket.emit('err', error);
 			});
+			//done(client);
 		});
+		console.log(req.create2);
 	});
 	  
 	socket.on('insert', function(req) {
-		//console.log(req);
 		var results = [];
 		pg.connect(conString, function(error, client, done) {
 			var query = client.query(req.insert1).on("row", function (row) {
 				console.log(row);
 				results.push(row);
-				done();
+				done(client);
 			});
 			query.on('error', function(error) {
 				//handle the error
@@ -71,7 +72,7 @@ io.on('connection', function(socket){
 		pg.connect(conString, function(error, client, done) {
 			var query = client.query(req.insert2).on("row", function (row) {
 				results.push(row);
-				done();
+				done(client);
 			});
 			query.on('error', function(error) {
 				//handle the error
@@ -98,7 +99,7 @@ io.on('connection', function(socket){
 					socket.emit('err', err);
 				} else {
 					socket.emit('table', result);
-					done();
+					done(client);
 				}
 			});
 		});
