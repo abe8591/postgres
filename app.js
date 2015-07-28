@@ -33,19 +33,16 @@ io.on('connection', function(socket){
 				if(err) {
 					console.log(err);
 					done(client);
-					client = new pg.Client(conString);
+					//client = new pg.Client(conString);
 					error = "Incorrect syntax";
 					socket.emit('err', err);
-				} else {
-					done(client);
-					//client = new pg.Client(conString);
 				}
 			});
 			//done(client);
-		});
+		//});
 		console.log(req.create1);
-		pg.end();
-		pg.connect(conString, function(error, client, done) {
+		//pg.end();
+		//pg.connect(conString, function(error, client, done) {
 			var query = client.query(req.create2, function (err, result) {
 				// Write out as HTML output
 				if(err) {
