@@ -1,0 +1,207 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title My App
+    // <link rel="shortcut icon" href="/assets/favicon.ico"/>
+    script(src='https://cdn.socket.io/socket.io-1.2.0.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.22.3/js/jquery.tablesorter.js')
+    link(href='/assets/style.css', rel='stylesheet')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.22.3/js/jquery.tablesorter.min.js')
+    script.
+      "use strict";
+      var numToggle = 0;
+      var sorter;
+      $(document).ready(function() {
+      var create1;
+      var create2;
+      var insert1;
+      var insert2;
+      var select;
+      var put;
+      var _delete;
+      sorter = $("#initTable").tablesorter();
+      var socket = io();
+      console.log(socket);
+      document.querySelector("#creBtn").onclick = function() {
+      create1 = $("#creArea1")[0].value;
+      create2 = $("#creArea2")[0].value;
+      console.log(create1);
+      console.log(create2);
+      socket.emit('create', { create1: create1, create2: create2 });
+      };
+      document.querySelector("#insBtn").onclick = function() {
+      insert1 = $("#insArea1")[0].value;
+      insert2 = $("#insArea2")[0].value;
+      console.log(insert1);
+      console.log(insert2);
+      socket.emit('insert', { insert1: insert1, insert2: insert2 });
+      };
+      document.querySelector("#selBtn").onclick = function() {
+      select = $("#selArea")[0].value;
+      console.log(select);
+      socket.emit('select', select);
+      };
+      document.querySelector("#putBtn").onclick = function() {
+      put = $("#putArea")[0].value;
+      console.log(put);
+      socket.emit('put', put);
+      };
+      document.querySelector("#delBtn").onclick = function() {
+      _delete = $("#delArea")[0].value;
+      console.log(_delete);
+      socket.emit('delete', _delete);
+      };
+      socket.on('table', function(result) {
+      makeRow(result);
+      });
+      socket.on('err', function(error) {
+      alert(error);
+      });
+      });
+      function makeRow(rows) {
+      // built in clear function
+      $('#initTable tr').remove('.even');
+      $('#initTable tr').remove('.odd');
+      for( var i = 0; i < rows.rows.length; i++) {
+      var tr = document.querySelector("#initTable").insertRow();
+      if(numToggle == 0) {
+      tr.className = "even";
+      numToggle = 1;
+      } else if(numToggle == 1) {
+      tr.className = "odd";
+      numToggle = 0;
+      }
+      for (var k = 0; k < rows.fields.length; k++) {
+      var td = tr.insertCell(k);
+      if ( k == 0 ) {
+      td.innerHTML = rows.rows[i].firstname;
+      } else if ( k == 1 ) {
+      td.innerHTML = rows.rows[i].lastname;
+      }
+      }
+      console.log(tr);
+      }
+      }
+    style.
+      table.tablesorter {
+      font-family: arial;
+      background-color: #CDCDCD;
+      font-size: 10pt;
+      width: 100%;
+      text-align: left;
+      }
+      table {
+      border-top-width: 0px;
+      border-right-width: 0px;
+      border-bottom-width: 0px;
+      border-left-width: 0px;
+      border-spacing: 2px;
+      display: table;
+      border-collapse: separate;
+      border-color: #333;
+      }
+      thead {
+      display: table-header-group;
+      vertical-align: middle;
+      }
+      tbody {
+      display: table-row-group;
+      vertical-align: middle;
+      }
+      tr {
+      display: table-row;
+      vertical-align: inherit;
+      background-color: #D3D3D3;
+      }
+      table.tablesorter tbody tr.odd td {
+      padding-bottom: 4px;
+      vertical-align: top;
+      background-color: #F0F0F6;
+      }
+      table.tablesorter tbody tr.even td {
+      padding-bottom: 4px;
+      vertical-align: top;
+      background-color: #D3D3D3;
+      }
+      th.header {
+      background-color: #D3D3D3;
+      cursor: pointer;
+      font-weight: bold;
+      background-repeat: no-repeat;
+      background-position: center left;
+      margin-left: -1px;
+      }
+      #initBox {
+      width: 90%;
+      margin-left: 5%;
+      margin-top: 15px;
+      height: 250px;
+      }
+      #initTable {
+      border: 1px solid #333;
+      width: 90%;
+      margin-left: 5%;
+      }
+      #headTitle {
+      background-color: #9CADCE;
+      height:40px;
+      }
+      #titleBox {
+      background-color: #D3D3D3;
+      }
+      button, form {
+      position: relative;
+      }
+      p, td, tr {
+      color: #0645AD;
+      }
+      p, th, h3{
+      font-weight:bold;
+      }
+      td, th{
+      text-align:center;
+      }
+      h3 {
+      color: #eee;
+      text-align:center;
+      padding-top:10px;
+      }
+      input {
+      display: block;
+      margin-bottom:5px;
+      }
+  body
+    .container
+      p CREATE
+      textarea#creArea1(rows='4', cols='50') DROP TABLE IF EXISTS emps;
+      textarea#creArea2(rows='4', cols='50') CREATE TABLE IF NOT EXISTS emps(firstname varchar(64), lastname varchar(64));
+      button#creBtn(type='submit') Submit
+      br
+      p INSERT
+      textarea#insArea1(rows='4', cols='50') INSERT INTO emps(firstname, lastname) values('Austin', 'Enright');
+      textarea#insArea2(rows='4', cols='50') INSERT INTO emps(firstname, lastname) values('Michael', 'Mastro');
+      button#insBtn(type='submit') Submit
+      br
+      p SELECT
+      textarea#selArea(rows='4', cols='50') SELECT * FROM emps ORDER BY lastname, firstname;
+      button#selBtn(type='submit') Submit
+      br
+      p UPDATE
+      textarea#putArea(rows='4', cols='50') UPDATE emps set firstname = 'Jim' WHERE firstname='Austin' OR lastname='Mastro';
+      button#putBtn(type='submit') Submit
+      br
+      p DELETE
+      textarea#delArea(rows='4', cols='50') DELETE FROM  emps WHERE lastname = 'Mastro';
+      button#delBtn(type='submit') Submit
+      br
+      #initBox
+        table#initTable.tablesorter
+          thead
+            tr
+              th First Name
+              th Last Name
+          tbody#rows
+        br
