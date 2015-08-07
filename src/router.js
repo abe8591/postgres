@@ -11,7 +11,7 @@ var router = function(app) {
     app.post("/signup", mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
     app.get("/logout", mid.requiresLogin, controllers.Account.logout);
     app.get("/postgres", mid.requiresSecure, controllers.Postgres.setup);
-    app.get("/", mid.requiresSecure, controllers.Account.signupPage);
+    app.get("/", mid.requiresSecure, controllers.Account.loginPage);
 };
 
 module.exports = router; 

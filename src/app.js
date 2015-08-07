@@ -14,10 +14,7 @@ var app_env = process.env["NODE_ENV"] || "development";
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 var conString = "pg://other_user:u_pick_it@52.2.3.184:5432/ellucian";
-var conString2 = "pg://other_user:u_pick_it@52.2.3.184:5432/users";
-//var conString = "pg://postgres:111111@149.24.49.145:5432/todo";
-//var conString = "pg://postgres:111111@localhost:5432/todo";
-//var client = new pg.Client(conString);
+
 var client;
 
 //pull in our routes
@@ -56,47 +53,36 @@ http.listen(port, function(err) {
 	 console.log('listening on ' + port);
 });
 
-/*app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/client/index.html');
-});*/
-
 io.on('connection', function(socket){
 	console.log('a user connected');
-	
+	socket.on('checkUser', function(req) {
+		client = new pg.Client(conString);
+		var username = "'" + req.username + "'";
+		var pass = "'" + req.password + "'";
+		pg.connect(conString, function(error, client, done) {
+			var query = client.query("SELECT user_id FROM users WHERE username = " + username + " AND pass = " + pass, function(err, result) {
+				done(client);
+				if(isNaN(query._result.rows[0].user_id) == false) { 
+					app.post('/postgres', function(req, res) {
+						res.redirect('/postgres');
+						
+					});
+				}
+			});
+			
+		});
+		pg.end();
+	});
 	socket.on('addUser', function(req) {
 		client = new pg.Client(conString);
 		pg.connect(conString, function(error, client, done) {
-			var query = client.query();
-			var id;
-			var todayDay = new Date().getDate();
-			var todayMonth = new Date().getMonth()+1;
-			var todayYear = new Date().getFullYear();
-			if(todayDay < 10) {
-				todayDay = '0' + todayDay;
-			}
-			
-			if(todayMonth < 10) {
-				todayMonth = '0' + todayMonth;
-			}
-			
-			var dateAdded = todayMonth + "/" + todayDay + "/" + todayYear;
-			
-			query.on("", function() {
-				id = num;
-			});
-			var query = client.query("INSERT INTO users(id, username, password, dateAdded) VALUES(" + id + ", " + req.password + ", " + req.username + ", " +
-						dateAdded + ")", function (err, result) {
+			var query = client.query(req.query, function (err, result) {
 				// Write out as HTML output
 				if(err) {
 					console.log(err);
 					done(client);
-					//client = new pg.Client(conString);
-					error = "Incorrect syntax";
-					socket.emit('err', err);
 				}
 			});
-			//done(client);
-			//});
 			pg.end();
 		});
 	});
@@ -115,10 +101,10 @@ io.on('connection', function(socket){
 				}
 			});
 			//done(client);
-		//});
-		console.log(req.create1);
-		//pg.end();
-		//pg.connect(conString, function(error, client, done) {
+			//});
+			console.log(req.create1);
+			//pg.end();
+			//pg.connect(conString, function(error, client, done) {
 			var query = client.query(req.create2, function (err, result) {
 				// Write out as HTML output
 				if(err) {
@@ -131,9 +117,9 @@ io.on('connection', function(socket){
 					done(client);
 				}
 			});
-			//done(client);
+			console.log(req.create2);
 		});
-		console.log(req.create2);
+		
 		pg.end();
 	});
 	  
@@ -189,6 +175,7 @@ io.on('connection', function(socket){
 					socket.emit('err', err);
 				} else {
 					socket.emit('table', result);
+					console.log(result);
 					done(client);
 				}
 			});
