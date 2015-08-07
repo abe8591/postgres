@@ -35,14 +35,6 @@ html(lang='en')
       todayMonth = '0' + todayMonth;
       }
       var dateAdded = "'" + todayMonth + "/" + todayDay + "/" + todayYear + "'";
-      $("#today").html(dateAdded);
-      var user = "'" + $("#user_name")[0].value + "'";
-      var pass = "'" + $("#pass_word")[0].value + "'";
-      var query = document.querySelector("#query1").innerHTML + " " + user + ", " + pass + ", " + dateAdded + ");";
-      document.querySelector("#userBtn").onclick = function() {
-      console.log(query);
-      socket.emit("addUser", {query:query});
-      };
       document.querySelector("#creBtn").onclick = function() {
       create1 = $("#creArea1")[0].value;
       create2 = $("#creArea2")[0].value;
@@ -56,6 +48,9 @@ html(lang='en')
       console.log(insert1);
       console.log(insert2);
       socket.emit('insert', { insert1: insert1, insert2: insert2 });
+      };
+      document.querySelector("#addUser").onclick = function() {
+        $("#insArea2")[0].value = "INSERT INTO users(user_id, username, pass, dateAdded) VALUES(DEFAULT, '{username}', '{password}', dateAdded);";
       };
       document.querySelector("#selBtn").onclick = function() {
       select = $("#selArea")[0].value;
@@ -193,15 +188,6 @@ html(lang='en')
       }
   body
     .container
-      p ADD USER
-      p#query1 INSERT INTO users(user_id, username, pass, dateAdded) VALUES(DEFAULT,
-      textArea#user_name(rows='1', cols='35') Your username
-      p ,
-      textArea#pass_word(rows='1', cols='35') Your password
-      p ,
-      p#today
-      p );
-      button#userBtn(type='submit') Submit
       p CREATE
       textarea#creArea1(rows='4', cols='50') DROP TABLE IF EXISTS emps;
       textarea#creArea2(rows='4', cols='50') CREATE TABLE IF NOT EXISTS emps(firstname varchar(64), lastname varchar(64));
@@ -211,6 +197,7 @@ html(lang='en')
       textarea#insArea1(rows='4', cols='50') INSERT INTO emps(firstname, lastname) values('Austin', 'Enright');
       textarea#insArea2(rows='4', cols='50') INSERT INTO emps(firstname, lastname) values('Michael', 'Mastro');
       button#insBtn(type='submit') Submit
+      button#addUser(type='button') Add User
       br
       p SELECT
       textarea#selArea(rows='4', cols='50') SELECT * FROM emps ORDER BY lastname, firstname;

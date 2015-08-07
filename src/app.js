@@ -64,7 +64,7 @@ io.on('connection', function(socket){
 				done(client);
 				if(isNaN(query._result.rows[0].user_id) == false) { 
 					app.post('/postgres', function(req, res) {
-						res.redirect('/postgres');
+						res.render('/postgres');
 						
 					});
 				}
@@ -72,19 +72,6 @@ io.on('connection', function(socket){
 			
 		});
 		pg.end();
-	});
-	socket.on('addUser', function(req) {
-		client = new pg.Client(conString);
-		pg.connect(conString, function(error, client, done) {
-			var query = client.query(req.query, function (err, result) {
-				// Write out as HTML output
-				if(err) {
-					console.log(err);
-					done(client);
-				}
-			});
-			pg.end();
-		});
 	});
 	
 	socket.on('create', function(req) {
