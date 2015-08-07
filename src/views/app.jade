@@ -2,7 +2,7 @@ doctype html
 html(lang='en')
   head
     meta(charset='utf-8')
-    title My App
+    title Postgres Node App
     // <link rel="shortcut icon" href="/assets/favicon.ico"/>
     script(src='https://cdn.socket.io/socket.io-1.2.0.js')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
@@ -51,6 +51,7 @@ html(lang='en')
       };
       document.querySelector("#addUser").onclick = function() {
         $("#insArea2")[0].value = "INSERT INTO users(user_id, username, pass, dateAdded) VALUES(DEFAULT, '{username}', '{password}', dateAdded);";
+        alert("Please be sure to change the fields for '{username}' and '{password}' with your desired values. Note: Keep the values in apostrophes.");
       };
       document.querySelector("#selBtn").onclick = function() {
       select = $("#selArea")[0].value;
