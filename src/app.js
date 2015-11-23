@@ -34,9 +34,9 @@ app.use(session({
   /*store: new pgSession({
     pg : pg,
     conString : conString,
-    tableName : 'todo'
+    tableName : 'todo',
   }),*/
-  secret: "Ellucian Interns",
+  secret : 'imafakesecret',
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days 
